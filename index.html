@@ -488,7 +488,7 @@
                 <div class="border-t border-gray-700 pt-4">
                     <div class="flex justify-between items-center mb-4">
                         <span class="font-semibold text-white">Total:</span>
-                        <span id="cart-total" class="font-bold text-xl text-indigo-400">$0.00</span>
+                        <span id="cart-total" class="font-bold text-xl text-indigo-400">₦0.00</span>
                     </div>
                     
                     <button id="whatsapp-checkout" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
@@ -591,7 +591,7 @@
             
             // Encode message for WhatsApp URL
             const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://wa.me/1234567890?text=${encodedMessage}`;
+            const whatsappUrl = `https://wa.me/2349123825193?text=${encodedMessage}`;
             
             window.open(whatsappUrl, '_blank');
         });
@@ -632,7 +632,7 @@
                         <p class="text-gray-400">Your cart is empty</p>
                     </div>
                 `;
-                cartTotal.textContent = '$0.00';
+                cartTotal.textContent = '₦0.00';
                 return;
             }
             
@@ -721,3 +721,4 @@
 </body>
 
 </html>
+
