@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Tech Haven</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: #0a0a0f;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .glass-effect {
+            background: rgba(15, 15, 25, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-glass {
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .product-card {
+            background: rgba(20, 20, 30, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+        
+        .filter-btn {
+            background: rgba(25, 25, 35, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .feature-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 10;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+        }
+        
+        .cart-notification {
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-4px);
+        }
+        
+        .search-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+        
+        .price-range {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .mobile-menu {
+            background: rgba(10, 10, 15, 0.98);
+            backdrop-filter: blur(20px);
+        }
+        
+        .pagination-btn {
+            background: rgba(25, 25, 35, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-btn:hover {
+            background: rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="nav-glass fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="index.html" class="text-2xl font-bold gradient-text">Tech Haven</a>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-400 hover:text-white font-medium transition-colors">Home</a>
+                    <a href="products.html" class="text-white hover:text-indigo-400 font-medium transition-colors">Products</a>
+                    <a href="categories.html" class="text-gray-400 hover:text-white font-medium transition-colors">Categories</a>
+                    <a href="about.html" class="text-gray-400 hover:text-white font-medium transition-colors">About</a>
+                    <a href="contact.html" class="text-gray-400 hover:text-white font-medium transition-colors">Contact</a>
+                </div>
+
+                <!-- Cart & Mobile Menu Button -->
+                <div class="flex items-center space-x-4">
+                    <!-- Cart -->
+                    <div class="relative">
+                        <button id="cart-btn" class="p-2 text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-shopping-cart text-xl"></i>
+                            <span id="cart-count" class="absolute -top-1 -right-1 bg-indigo-600 text-white rounded-full text-xs px-2 py-1 font-bold">0</span>
+                        </button>
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-400 hover:text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu fixed top-16 left-0 w-full h-0 overflow-hidden transition-all duration-300 md:hidden">
+            <div class="px-4 py-6 space-y-4">
+                <a href="index.html" class="block text-white hover:text-indigo-400 font-medium">Home</a>
+                <a href="products.html" class="block text-gray-400 hover:text-white font-medium">Products</a>
+                <a href="categories.html" class="block text-gray-400 hover:text-white font-medium">Categories</a>
+                <a href="about.html" class="block text-gray-400 hover:text-white font-medium">About</a>
+                <a href="contact.html" class="block text-gray-400 hover:text-white font-medium">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Products Header -->
+    <section class="pt-28 pb-16 bg-gradient-to-b from-[#0a0a0f] to-[#1a1a2e]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Our Products</h1>
+                <p class="text-gray-400 text-lg">Discover our complete collection of cutting-edge technology</p>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="glass-effect rounded-2xl p-6 mb-12">
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Search -->
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="search-input" placeholder="Search products..." class="search-input w-full pl-12 pr-4 py-3 rounded-lg text-white placeholder-gray-400">
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div>
+                        <select id="category-filter" class="search-input w-full px-4 py-3 rounded-lg text-white">
+                            <option value="all">All Categories</option>
+                            <option value="smartphones">Smartphones</option>
+                            <option value="laptops">Laptops</option>
+                            <option value="audio">Audio</option>
+                            <option value="wearables">Wearables</option>
+                            <option value="accessories">Accessories</option>
+                            <option value="gaming">Gaming</option>
+                        </select>
+                    </div>
+
+                    <!-- Price Range -->
+                    <div>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-gray-400">Price:</span>
+                            <input type="range" id="price-range" min="0" max="2000" value="20000000" class="price-range flex-1">
+                            <span id="price-value" class="text-white font-medium">₦20000000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Filters -->
+                <div class="flex flex-wrap gap-4 mt-6">
+                    <button class="filter-btn active px-6 py-2 rounded-full text-white" data-filter="all">
+                        All Products
+                    </button>
+                    <button class="filter-btn px-6 py-2 rounded-full text-white" data-filter="featured">
+                        <i class="fas fa-star mr-2"></i>Featured
+                    </button>
+                    <button class="filter-btn px-6 py-2 rounded-full text-white" data-filter="sale">
+                        <i class="fas fa-tag mr-2"></i>On Sale
+                    </button>
+                    <button class="filter-btn px-6 py-2 rounded-full text-white" data-filter="new">
+                        <i class="fas fa-bolt mr-2"></i>New Arrivals
+                    </button>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="products-grid">
+                <!-- Product 1 -->
+                <div class="product-card rounded-xl overflow-hidden group" data-category="smartphones" data-price="899" data-featured="true">
+                    <div class="relative">
+                        <span class="feature-badge bg-green-500 text-white">NEW</span>
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/10d6ca8c-5c5e-4259-b00f-c5dbd7afa4b5.png" alt="Premium smartphone with edge-to-edge OLED display and triple camera system in cosmic black finish" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-white text-lg mb-2">Nexus Phone X1</h3>
+                        <p class="text-gray-400 text-sm mb-4">6.7" AMOLED, 200MP Camera, 5G</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-indigo-400">₦2,000,000</span>
+                            <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="5" data-name="Nexus Phone X1" data-price="2000000.00">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card rounded-xl overflow-hidden group" data-category="laptops" data-price="1499" data-featured="true">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6a1a98c3-10bf-4b7f-97db-2d3ca4a74e33.png" alt="Sleek ultrabook with aluminum unibody design and backlit keyboard in space gray finish" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="p-6">
+                        <h3 class="font-semibold text-white text-lg mb-2">Cosmos Book Air</h3>
+                        <p class="text-gray-400 text-sm mb-4">M2 Chip, 16GB RAM, 1TB SSD</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-indigo-400">₦1499000.99</span>
+                            <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="6" data-name="Cosmos Book Air" data-price="1499000.99">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card rounded-xl overflow-hidden group" data-category="audio" data-price="199" data-sale="true">
+                    <div class="relative">
+                        <span class="feature-badge bg-red-500 text-white">SALE</span>
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5b10e90d-5a2e-49b0-bd78-5bf7e65e78b7.png" alt="Wireless headphones with active noise cancellation and premium sound quality in matte black" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-white text-lg mb-2">Quantum Headphones Pro</h3>
+                        <p class="text-gray-400 text-sm mb-4">Active Noise Cancelling, 40hr battery</p>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="text-2xl font-bold text-indigo-400">₦199000.99</span>
+                                <span class="text-sm text-gray-500 line-through ml-2">₦249000.99</span>
+                            </div>
+                            <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="7" data-name="Quantum Headphones Pro" data-price="199000.99">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card rounded-xl overflow-hidden group" data-category="wearables" data-price="349" data-featured="true">
+                    <div class="relative">
+                        <span class="feature-badge bg-blue-500 text-white">BEST</span>
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5eac1ff4-a0b2-4113-9ee1-5a0b4e4a5de3.png" alt="Smart watch with health monitoring features and always-on display in midnight black" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-white text-lg mb-2">Galaxy Watch Pro</h3>
+                        <p class="text-gray-400 text-sm mb-4">Health tracking, LTE, 3-day battery</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-indigo-400">$349.99</span>
+                            <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="8" data-name="Galaxy Watch Pro" data-price="349.99">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product-card rounded-xl overflow-hidden group" data-category="gaming" data-price="1899" data-new="true">
+                    <div class="relative">
+                        <span class="feature-badge bg-purple-500 text-white">NEW</span>
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8dafd26a-bb0d-485e-b8c4-7e9c4beeabba.png" alt="Gaming laptop with RGB lighting and high-performance graphics card for immersive gaming" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-white text-lg mb-2">Nebula Gaming Pro</h3>
+                        <p class="text-gray-400 text-sm mb-4">RTX 4070, 32GB RAM, 1TB SSD</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-indigo-400">$1899.99</span>
+                            <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="9" data-name="Nebula Gaming Pro" data-price="1899.99">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="product-card rounded-xl overflow-hidden group" data-category="audio" data-price="249" data-new="true">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ab2ca1d3-1b12-4e2c-9f15-8b99eaf08b4c.png" alt="Wireless earbuds with premium sound quality and noise cancellation in charging case" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="p-6">
+                        <h3 class="font-semibold text-white text-lg mb-2">Star Buds Pro</h3>
+                        <p class="text-gray-400 text-sm mb-4">True Wireless, Spatial Audio</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-indigo-400">$249.99</span>
+                            <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="10" data-name="Star Buds Pro" data-price="249.99">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 7 -->
+                <div class="product-card rounded-xl overflow-hidden group" data-category="accessories" data-price="129" data-sale="true">
+                    <div class="relative">
+                        <span class="feature-badge bg-red-500 text-white">SALE</span>
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/9dfdbf57-a56b-4b9e-91a4-2a8a6ba55d1a.png" alt="Fitness tracker with health monitoring features and long battery life for active lifestyle" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-white text-lg mb-2">FitBand Pro</h3>
+                        <p class="text-gray-400 text-sm mb-4">Heart Rate, Sleep Tracking, 7-day battery</p>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="text-2xl font-bold text-indigo-400">$129.99</span>
+                                <span class="text-sm text-gray-500 line-through ml-2">$159.99</span>
+                            </div>
+                            <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="11" data-name="FitBand Pro" data-price="129.99">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 8 -->
+                <div class="product-card rounded-xl overflow-hidden group" data-category="accessories" data-price="199" data-featured="true">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/64acd7fb-6c88-4161-8a7a-3d16e57f5ec4.png" alt="Smart home hub with voice control and multi-room audio synchronization capabilities" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="p-6">
+                        <h3 class="font-semibold text-white text-lg mb-2">Smart Home Hub</h3>
+                        <p class="text-gray-400 text-sm mb-4">Voice Control, Multi-room Audio</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-indigo-400">$199.99</span>
+                            <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="12" data-name="Smart Home Hub" data-price="199.99">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="flex justify-center items-center space-x-4 mt-16">
+                <button class="pagination-btn px-4 py-2 rounded-lg text-gray-400 hover:text-white">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="pagination-btn px-4 py-2 rounded-lg bg-indigo-600 text-white">1</button>
+                <button class="pagination-btn px-4 py-2 rounded-lg text-gray-400 hover:text-white">2</button>
+                <button class="pagination-btn px-4 py-2 rounded-lg text-gray-400 hover:text-white">3</button>
+                <button class="pagination-btn px-4 py-2 rounded-lg text-gray-400 hover:text-white">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="glass-effect rounded-2xl p-12">
+                <h2 class="text-3xl font-bold text-white mb-4">Never Miss a Deal</h2>
+                <p class="text-gray-400 text-lg mb-8">Subscribe to get exclusive offers and product updates</p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                    <input type="email" placeholder="Enter your email" class="search-input flex-1 px-4 py-3 rounded-lg text-white placeholder-gray-400">
+                    <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        Subscribe
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="glass-effect border-t border-gray-800 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">Tech Haven</h3>
+                    <p class="text-gray-400 mb-6">Your destination for premium gadgets and cutting-edge technology.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-facebook-f text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-instagram text-lg"></i>
+                        </a>
+                        <a href="https://wa.me/2349123825193" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-whatsapp text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="products.html" class="text-gray-400 hover:text-white transition-colors">Products</a></li>
+                        <li><a href="categories.html" class="text-gray-400 hover:text-white transition-colors">Categories</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition-colors">About</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Categories</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Smartphones</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Laptops</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Audio</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Wearables</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Accessories</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Contact Info</h4>
+                    <div class="space-y-3">
+                        <p class="text-gray-400"><i class="fas fa-map-marker-alt mr-3"></i> Computer Village, Ikeja, Lagos.</p>
+                        <p class="text-gray-400"><i class="fas fa-phone mr-3"></i> +234 (912) 382 5193</p>
+                        <p class="text-gray-400"><i class="fas fa-envelope mr-3"></i> abdullahabdulsobur@gmail.com</p>
+                        <p class="text-gray-400"><i class="fas fa-clock mr-3"></i> Mon-Fri: 9AM-6PM</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 text-center">
+                <p class="text-gray-400">© 2025 Tech Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 transition-opacity duration-300">
+        <div class="absolute right-0 top-0 h-full w-full md:w-96 bg-gray-900 shadow-xl transform transition-transform duration-300 translate-x-full">
+            <div class="p-6 h-full flex flex-col">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-white">Shopping Cart</h3>
+                    <button id="close-cart" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div id="cart-items" class="flex-1 overflow-y-auto space-y-4 mb-6">
+                    <!-- Cart items will be dynamically added here -->
+                </div>
+                
+                <div class="border-t border-gray-700 pt-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="font-semibold text-white">Total:</span>
+                        <span id="cart-total" class="font-bold text-xl text-indigo-400">₦0.00</span>
+                    </div>
+                    
+                    <button id="whatsapp-checkout" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
+                        <i class="fab fa-whatsapp mr-3 text-lg"></i>
+                        Checkout via WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add to Cart Notification -->
+    <div id="cart-notification" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg hidden cart-notification">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span>Item added to cart!</span>
+    </div>
+
+    <script>
+        // Cart functionality
+        let cart = JSON.parse(localStorage.getItem('tech_haven_cart')) || [];
+        const cartModal = document.getElementById('cart-modal');
+        const cartItems = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+        const cartCount = document.getElementById('cart-count');
+        const cartBtn = document.getElementById('cart-btn');
+        const closeCart = document.getElementById('close-cart');
+        const notification = document.getElementById('cart-notification');
+        const whatsappCheckout = document.getElementById('whatsapp-checkout');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const searchInput = document.getElementById('search-input');
+        const categoryFilter = document.getElementById('category-filter');
+        const priceRange = document.getElementById('price-range');
+        const priceValue = document.getElementById('price-value');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const productsGrid = document.getElementById('products-grid');
+        const productCards = document.querySelectorAll('.product-card');
+
+        // Initialize cart count
+        updateCartCount();
+
+        // Mobile menu toggle
+        mobileMenuBtn.addEventListener('click', function() {
+            const isOpen = mobileMenu.style.height !== '0px';
+            if (isOpen) {
+                mobileMenu.style.height = '0px';
+            } else {
+                mobileMenu.style.height = '200px';
+            }
+        });
+
+        // Price range update
+        priceRange.addEventListener('input', function() {
+            priceValue.textContent = '₦' + this.value;
+            filterProducts();
+        });
+
+        // Search functionality
+        searchInput.addEventListener('input', filterProducts);
+
+        // Category filter
+        categoryFilter.addEventListener('change', filterProducts);
+
+        // Quick filters
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                filterProducts();
+            });
+        });
+
+        // Add to cart buttons
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                const price = parseFloat(this.getAttribute('data-price'));
+                
+                addToCart(id, name, price);
+            });
+        });
+
+        // Show cart modal
+        cartBtn.addEventListener('click', function() {
+            cartModal.classList.remove('hidden');
+            setTimeout(() => {
+                cartModal.querySelector('.transform').classList.remove('translate-x-full');
+            }, 10);
+            updateCartDisplay();
+        });
+
+        // Close cart modal
+        closeCart.addEventListener('click', function() {
+            cartModal.querySelector('.transform').classList.add('translate-x-full');
+            setTimeout(() => {
+                cartModal.classList.add('hidden');
+            }, 300);
+        });
+
+        // Close modal when clicking outside
+        cartModal.addEventListener('click', function(e) {
+            if (e.target === cartModal) {
+                cartModal.querySelector('.transform').classList.add('translate-x-full');
+                setTimeout(() => {
+                    cartModal.classList.add('hidden');
+                }, 300);
+            }
+        });
+
+        // WhatsApp checkout
+        whatsappCheckout.addEventListener('click', function() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            let message = "Hello! I'd like to purchase the following items from Tech Haven:\n\n";
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                message += `• ${item.name} (Qty: ${item.quantity}) - $${itemTotal.toFixed(2)}\n`;
+            });
+            
+            message += `\nTotal: $${total.toFixed(2)}\n\nPlease let me know how to proceed with payment and delivery.`;
+            
+            // Encode message for WhatsApp URL
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/2349123825193?text=${encodedMessage}`;
+            
+            window.open(whatsappUrl, '_blank');
+        });
+
+        function filterProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const category = categoryFilter.value;
+            const maxPrice = parseInt(priceRange.value);
+            const activeFilter = document.querySelector('.filter-btn.active')?.getAttribute('data-filter');
+            
+            productCards.forEach(card => {
+                const productName = card.querySelector('h3').textContent.toLowerCase();
+                const productCategory = card.getAttribute('data-category');
+                const productPrice = parseInt(card.getAttribute('data-price'));
+                const isFeatured = card.getAttribute('data-featured') === 'true';
+                const isSale = card.getAttribute('data-sale') === 'true';
+                const isNew = card.getAttribute('data-new') === 'true';
+                
+                const matchesSearch = productName.includes(searchTerm);
+                const matchesCategory = category === 'all' || productCategory === category;
+                const matchesPrice = productPrice <= maxPrice;
+                let matchesFilter = true;
+                
+                if (activeFilter === 'featured') matchesFilter = isFeatured;
+                if (activeFilter === 'sale') matchesFilter = isSale;
+                if (activeFilter === 'new') matchesFilter = isNew;
+                
+                if (matchesSearch && matchesCategory && matchesPrice && matchesFilter) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function addToCart(id, name, price) {
+            // Check if item already in cart
+            const existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({
+                    id,
+                    name,
+                    price,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('tech_haven_cart', JSON.stringify(cart));
+            updateCartCount();
+            showNotification();
+        }
+
+        function updateCartCount() {
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+
+        function updateCartDisplay() {
+            cartItems.innerHTML = '';
+            let total = 0;
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center py-12">
+                        <i class="fas fa-shopping-cart text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-400">Your cart is empty</p>
+                    </div>
+                `;
+                cartTotal.textContent = '₦0.00';
+                return;
+            }
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                const cartItem = document.createElement('div');
+                cartItem.className = 'flex justify-between items-center border-b border-gray-700 pb-4';
+                cartItem.innerHTML = `
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-white text-sm">${item.name}</h4>
+                        <p class="text-gray-400 text-xs">$${item.price} x ${item.quantity}</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button class="decrease-item text-gray-400 hover:text-red-400 transition-colors" data-id="${item.id}">
+                            <i class="fas fa-minus text-sm"></i>
+                        </button>
+                        <span class="text-white text-sm font-medium">${item.quantity}</span>
+                        <button class="increase-item text-gray-400 hover:text-green-400 transition-colors" data-id="${item.id}">
+                            <i class="fas fa-plus text-sm"></i>
+                        </button>
+                    </div>
+                `;
+                
+                cartItems.appendChild(cartItem);
+            });
+            
+            // Update total
+            cartTotal.textContent = `$${total.toFixed(2)}`;
+            
+            // Add event listeners to quantity buttons
+            document.querySelectorAll('.increase-item').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const item = cart.find(item => item.id === id);
+                    if (item) {
+                        item.quantity++;
+                        localStorage.setItem('tech_haven_cart', JSON.stringify(cart));
+                        updateCartDisplay();
+                        updateCartCount();
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.decrease-item').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const itemIndex = cart.findIndex(item => item.id === id);
+                    if (itemIndex !== -1) {
+                        if (cart[itemIndex].quantity > 1) {
+                            cart[itemIndex].quantity--;
+                        } else {
+                            cart.splice(itemIndex, 1);
+                        }
+                        localStorage.setItem('tech_haven_cart', JSON.stringify(cart));
+                        updateCartDisplay();
+                        updateCartCount();
+                    }
+                });
+            });
+        }
+
+        // Show notification
+        function showNotification() {
+            notification.classList.remove('hidden');
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

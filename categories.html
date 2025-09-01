@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories - Tech Haven</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: #0a0a0f;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .glass-effect {
+            background: rgba(15, 15, 25, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-glass {
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .category-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+        
+        .product-card {
+            background: rgba(20, 20, 30, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+        
+        .feature-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 10;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+        }
+        
+        .category-card {
+            background: rgba(25, 25, 35, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover {
+            background: rgba(35, 35, 45, 0.8);
+            transform: translateY(-4px);
+        }
+        
+        .cart-notification {
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .mobile-menu {
+            background: rgba(10, 10, 15, 0.98);
+            backdrop-filter: blur(20px);
+        }
+        
+        .price-naira {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="nav-glass fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="index.html" class="text-2xl font-bold gradient-text">Tech Haven</a>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-400 hover:text-white font-medium transition-colors">Home</a>
+                    <a href="products.html" class="text-gray-400 hover:text-white font-medium transition-colors">Products</a>
+                    <a href="categories.html" class="text-white hover:text-indigo-400 font-medium transition-colors">Categories</a>
+                    <a href="about.html" class="text-gray-400 hover:text-white font-medium transition-colors">About</a>
+                    <a href="contact.html" class="text-gray-400 hover:text-white font-medium transition-colors">Contact</a>
+                </div>
+
+                <!-- Cart & Mobile Menu Button -->
+                <div class="flex items-center space-x-4">
+                    <!-- Cart -->
+                    <div class="relative">
+                        <button id="cart-btn" class="p-2 text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-shopping-cart text-xl"></i>
+                            <span id="cart-count" class="absolute -top-1 -right-1 bg-indigo-600 text-white rounded-full text-xs px-2 py-1 font-bold">0</span>
+                        </button>
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-400 hover:text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu fixed top-16 left-0 w-full h-0 overflow-hidden transition-all duration-300 md:hidden">
+            <div class="px-4 py-6 space-y-4">
+                <a href="index.html" class="block text-white hover:text-indigo-400 font-medium">Home</a>
+                <a href="products.html" class="block text-gray-400 hover:text-white font-medium">Products</a>
+                <a href="categories.html" class="block text-gray-400 hover:text-white font-medium">Categories</a>
+                <a href="about.html" class="block text-gray-400 hover:text-white font-medium">About</a>
+                <a href="contact.html" class="block text-gray-400 hover:text-white font-medium">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Categories Header -->
+    <section class="category-header pt-28 pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">Shop by Category</h1>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+                    Explore our curated collection of premium tech products organized by category. 
+                    Find exactly what you're looking for with our organized browsing experience.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Grid -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+                <div class="category-card rounded-xl p-8 text-center cursor-pointer group" onclick="scrollToCategory('smartphones')">
+                    <div class="w-20 h-20 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-indigo-700 transition-colors">
+                        <i class="fas fa-mobile-alt text-white text-3xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-white text-lg mb-2">Smartphones</h3>
+                    <p class="text-gray-400 text-sm">Latest flagship devices</p>
+                </div>
+                
+                <div class="category-card rounded-xl p-8 text-center cursor-pointer group" onclick="scrollToCategory('laptops')">
+                    <div class="w-20 h-20 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-purple-700 transition-colors">
+                        <i class="fas fa-laptop text-white text-3xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-white text-lg mb-2">Laptops</h3>
+                    <p class="text-gray-400 text-sm">Powerful computing</p>
+                </div>
+                
+                <div class="category-card rounded-xl p-8 text-center cursor-pointer group" onclick="scrollToCategory('audio')">
+                    <div class="w-20 h-20 bg-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-pink-700 transition-colors">
+                        <i class="fas fa-headphones text-white text-3xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-white text-lg mb-2">Audio</h3>
+                    <p class="text-gray-400 text-sm">Premium sound experience</p>
+                </div>
+                
+                <div class="category-card rounded-xl p-8 text-center cursor-pointer group" onclick="scrollToCategory('wearables')">
+                    <div class="w-20 h-20 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-watch text-white text-3xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-white text-lg mb-2">Wearables</h3>
+                    <p class="text-gray-400 text-sm">Smart tech on your wrist</p>
+                </div>
+            </div>
+
+            <!-- Smartphones Category -->
+            <div id="smartphones" class="mb-20">
+                <div class="flex items-center justify-between mb-12">
+                    <h2 class="text-3xl font-bold text-white">Smartphones</h2>
+                    <span class="text-gray-400">12 products</span>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Smartphone 1 -->
+                    <div class="product-card rounded-xl overflow-hidden group">
+                        <div class="relative">
+                            <span class="feature-badge bg-green-500 text-white">NEW</span>
+                            <img src="https://placehold.co/300x300/1a1a2e/6366f1?text=iPhone+15+Pro" alt="Latest iPhone 15 Pro with titanium design and advanced camera system" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-semibold text-white text-lg mb-2">iPhone 15 Pro Max</h3>
+                            <p class="text-gray-400 text-sm mb-4">6.7" Super Retina, Titanium, 48MP Camera</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-bold text-indigo-400 price-naira">₦950,000</span>
+                                <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="101" data-name="iPhone 15 Pro Max" data-price="950000">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Smartphone 2 -->
+                    <div class="product-card rounded-xl overflow-hidden group">
+                        <div class="relative">
+                            <span class="feature-badge bg-blue-500 text-white">BEST</span>
+                            <img src="https://placehold.co/300x300/1a1a2e/6366f1?text=Galaxy+S24" alt="Samsung Galaxy S24 Ultra with S Pen and advanced AI features" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-semibold text-white text-lg mb-2">Samsung Galaxy S24 Ultra</h3>
+                            <p class="text-gray-400 text-sm mb-4">6.8" Dynamic AMOLED, 200MP Camera, S Pen</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-bold text-indigo-400 price-naira">₦880,000</span>
+                                <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="102" data-name="Samsung Galaxy S24 Ultra" data-price="880000">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Smartphone 3 -->
+                    <div class="product-card rounded-xl overflow-hidden group">
+                        <img src="https://placehold.co/300x300/1a1a2e/6366f1?text=Google+Pixel+8" alt="Google Pixel 8 Pro with advanced AI camera features" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-6">
+                            <h3 class="font-semibold text-white text-lg mb-2">Google Pixel 8 Pro</h3>
+                            <p class="text-gray-400 text-sm mb-4">6.7" OLED, Tensor G3, 50MP Camera</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-bold text-indigo-400 price-naira">₦720,000</span>
+                                <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="103" data-name="Google Pixel 8 Pro" data-price="720000">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Smartphone 4 -->
+                    <div class="product-card rounded-xl overflow-hidden group">
+                        <div class="relative">
+                            <span class="feature-badge bg-red-500 text-white">SALE</span>
+                            <img src="https://placehold.co/300x300/1a1a2e/6366f1?text=Xiaomi+13+T" alt="Xiaomi 13T Pro with Leica camera and fast charging" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-semibold text-white text-lg mb-2">Xiaomi 13T Pro</h3>
+                            <p class="text-gray-400 text-sm mb-4">6.67" AMOLED, Leica Camera, 120W Charging</p>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-2xl font-bold text-indigo-400 price-naira">₦420,000</span>
+                                    <span class="text-sm text-gray-500 line-through ml-2">₦480,000</span>
+                                </div>
+                                <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="104" data-name="Xiaomi 13T Pro" data-price="420000">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Laptops Category -->
+            <div id="laptops" class="mb-20">
+                <div class="flex items-center justify-between mb-12">
+                    <h2 class="text-3xl font-bold text-white">Laptops</h2>
+                    <span class="text-gray-400">8 products</span>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Laptop 1 -->
+                    <div class="product-card rounded-xl overflow-hidden group">
+                        <div class="relative">
+                            <span class="feature-badge bg-green-500 text-white">NEW</span>
+                            <img src="https://placehold.co/300x300/1a1a2e/6366f1?text=MacBook+Pro+M3" alt="MacBook Pro with M3 Max chip and Liquid Retina XDR display" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-semibold text-white text-lg mb-2">MacBook Pro 16" M3 Max</h3>
+                            <p class="text-gray-400 text-sm mb-4">M3 Max, 32GB RAM, 1TB SSD, 16-core GPU</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-bold text-indigo-400 price-naira">₦2,450,000</span>
+                                <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="201" data-name="MacBook Pro 16 M3 Max" data-price="2450000">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Laptop 2 -->
+                    <div class="product-card rounded-xl overflow-hidden group">
+                        <img src="https://placehold.co/300x300/1a1a2e/6366f1?text=Dell+XPS+15" alt="Dell XPS 15 with OLED display and Intel Core i9 processor" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-6">
+                            <h3 class="font-semibold text-white text-lg mb-2">Dell XPS 15</h3>
+                            <p class="text-gray-400 text-sm mb-4">Intel i9, 32GB RAM, 1TB SSD, OLED 3.5K</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-bold text-indigo-400 price-naira">₦1,280,000</span>
+                                <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="202" data-name="Dell XPS 15" data-price="1280000">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Laptop 3 -->
+                    <div class="product-card rounded-xl overflow-hidden group">
+                        <div class="relative">
+                            <span class="feature-badge bg-blue-500 text-white">BEST</span>
+                            <img src="https://placehold.co/300x300/1a1a2e/6366f1?text=ASUS+ROG+Zephyrus" alt="ASUS ROG Zephyrus gaming laptop with RGB lighting and high-performance graphics" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-semibold text-white text-lg mb-2">ASUS ROG Zephyrus G16</h3>
+                            <p class="text-gray-400 text-sm mb-4">RTX 4070, 32GB RAM, 2TB SSD, 240Hz</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-bold text-indigo-400 price-naira">₦1,650,000</span>
+                                <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="203" data-name="ASUS ROG Zephyrus G16" data-price="1650000">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Laptop 4 -->
+                    <div class="product-card rounded-xl overflow-hidden group">
+                        <div class="relative">
+                            <span class="feature-badge bg-red-500 text-white">SALE</span>
+                            <img src="https://placehold.co/300x300/1a1a2e/6366f1?text=HP+Spectre+x360" alt="HP Spectre x360 convertible laptop with premium design" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-semibold text-white text-lg mb-2">HP Spectre x360</h3>
+                            <p class="text-gray-400 text-sm mb-4">Intel i7, 16GB RAM, 1TB SSD, 4K Touch</p>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-2xl font-bold text-indigo-400 price-naira">₦980,000</span>
+                                    <span class="text-sm text-gray-500 line-through ml-2">₦1,150,000</span>
+                                </div>
+                                <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="204" data-name="HP Spectre x360" data-price="980000">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audio Category -->
+            <div id="audio" class="mb-20">
+                <div class="flex items-center justify-between mb-12">
+                    <h2 class="text-3xl font-bold text-white">Audio</h2>
+                    <span class="text-gray-400">10 products</span>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Audio 1 -->
+                    <div class="product-card rounded-xl overflow-hidden group">
+                        <div class="relative">
+                            <span class="feature-badge bg-green-500 text-white">NEW</span>
+                            <img src="https://placehold.co/300x300/1a1a2e/6366f1?text=Sony+WH-1000XM5" alt="Sony WH-1000XM5 wireless headphones with industry-leading noise cancellation" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-semibold text-white text-lg mb-2">Sony WH-1000XM5</h3>
+                            <p class="text-gray-400 text-sm mb-4">Industry-leading noise cancellation, 30hr battery</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-bold text-indigo-400 price-naira">₦280,000</span>
+                                <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="301" data-name="Sony WH-1000XM5" data-price="280000">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audio 2 -->
+                    <div class="product-card rounded-xl overflow-hidden group">
+                        <div class="relative">
+                            <span class="feature-badge bg-blue-500 text-white">BEST</span>
+                            <img src="https://placehold.co/300x300/1a1a2e/6366f1?text=AirPods+Pro+2" alt="Apple AirPods Pro 2 with MagSafe charging and spatial audio" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-semibold text-white text-lg mb-2">AirPods Pro 2</h3>
+                            <p class="text-gray-400 text-sm mb-4">Active Noise Cancellation, Spatial Audio, MagSafe</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-bold text-indigo-400 price-naira">₦220,000</span>
+                                <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="302" data-name="AirPods Pro 2" data-price="220000">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audio 3 -->
+                    <div class="product-card rounded-xl overflow-hidden group">
+                        <img src="https://placehold.co/300x300/1a1a2e/6366f1?text=Bose+QuietComfort" alt="Bose QuietComfort Ultra headphones with immersive audio experience" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-6">
+                            <h3 class="font-semibold text-white text-lg mb-2">Bose QuietComfort Ultra</h3>
+                            <p class="text-gray-400 text-sm mb-4">Immersive Audio, 24hr battery, Comfortable</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-bold text-indigo-400 price-naira">₦250,000</span>
+                                <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="303" data-name="Bose QuietComfort Ultra" data-price="250000">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audio 4 -->
+                    <div class="product-card rounded-xl overflow-hidden group">
+                        <div class="relative">
+                            <span class="feature-badge bg-red-500 text-white">SALE</span>
+                            <img src="https://placehold.co/300x300/1a1a2e/6366f1?text=Sennheiser+Momentum+4" alt="Sennheiser Momentum 4 wireless headphones with premium sound quality" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-semibold text-white text-lg mb-2">Sennheiser Momentum 4</h3>
+                            <p class="text-gray-400 text-sm mb-4">60hr battery, Premium Sound, Adaptive Noise Cancellation</p>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-2xl font-bold text-indigo-400 price-naira">₦210,000</span>
+                                    <span class="text-sm text-gray-500 line-through ml-2">₦260,000</span>
+                                </div>
+                                <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="304" data-name="Sennheiser Momentum 4" data-price="210000">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wearables Category -->
+            <div id="wearables">
+                <div class="flex items-center justify-between mb-12">
+                    <h2 class="text-3xl font-bold text-white">Wearables</h2>
+                    <span class="text-gray-400">6 products</span>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Wearable 1 -->
+                    <div class="product-card rounded-xl overflow-hidden group">
+                        <div class="relative">
+                            <span class="feature-badge bg-green-500 text-white">NEW</span>
+                            <img src="https://placehold.co/300x300/1a1a2e/6366f1?text=Apple+Watch+Series+9" alt="Apple Watch Series 9 with always-on display and health monitoring features" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-semibold text-white text-lg mb-2">Apple Watch Series 9</h3>
+                            <p class="text-gray-400 text-sm mb-4">45mm, GPS + Cellular, Always-On Display</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-bold text-indigo-400 price-naira">₦350,000</span>
+                                <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="401" data-name="Apple Watch Series 9" data-price="350000">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wearable 2 -->
+                    <div class="product-card rounded-xl overflow-hidden group">
+                        <div class="relative">
+                            <span class="feature-badge bg-blue-500 text-white">BEST</span>
+                            <img src="https://placehold.co/300x300/1a1a2e/6366f1?text=Samsung+Galaxy+Watch+6" alt="Samsung Galaxy Watch 6 Classic with rotating bezel and health features" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-semibold text-white text-lg mb-2">Samsung Galaxy Watch 6 Classic</h3>
+                            <p class="text-gray-400 text-sm mb-4">47mm, LTE, Rotating Bezel, Health Monitoring</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-bold text-indigo-400 price-naira">₦280,000</span>
+                                <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="402" data-name="Samsung Galaxy Watch 6 Classic" data-price="280000">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wearable 3 -->
+                    <div class="product-card rounded-xl overflow-hidden group">
+                        <img src="https://placehold.co/300x300/1a1a2e/6366f1?text=Garmin+Fenix+7" alt="Garmin Fenix 7X Pro solar multisport GPS watch with advanced training features" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-6">
+                            <h3 class="font-semibold text-white text-lg mb-2">Garmin Fenix 7X Pro Solar</h3>
+                            <p class="text-gray-400 text-sm mb-4">Solar Charging, Multi-sport GPS, 28-day battery</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-bold text-indigo-400 price-naira">₦420,000</span>
+                                <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="403" data-name="Garmin Fenix 7X Pro Solar" data-price="420000">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wearable 4 -->
+                    <div class="product-card rounded-xl overflow-hidden group">
+                        <div class="relative">
+                            <span class="feature-badge bg-red-500 text-white">SALE</span>
+                            <img src="https://placehold.co/300x300/1a1a2e/6366f1?text=Fitbit+Charge+6" alt="Fitbit Charge 6 fitness tracker with Google integration and health features" class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-semibold text-white text-lg mb-2">Fitbit Charge 6</h3>
+                            <p class="text-gray-400 text-sm mb-4">Google Integration, 7-day battery, Health Tracking</p>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-2xl font-bold text-indigo-400 price-naira">₦95,000</span>
+                                    <span class="text-sm text-gray-500 line-through ml-2">₦120,000</span>
+                                </div>
+                                <button class="add-to-cart bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition-colors" data-id="404" data-name="Fitbit Charge 6" data-price="95000">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="glass-effect border-t border-gray-800 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">Tech Haven</h3>
+                    <p class="text-gray-400 mb-6">Your destination for premium gadgets and cutting-edge technology.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-facebook-f text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-instagram text-lg"></i>
+                        </a>
+                        <a href="https://wa.me/1234567890" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-whatsapp text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="products.html" class="text-gray-400 hover:text-white transition-colors">Products</a></li>
+                        <li><a href="categories.html" class="text-gray-400 hover:text-white transition-colors">Categories</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition-colors">About</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Categories</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#smartphones" class="text-gray-400 hover:text-white transition-colors">Smartphones</a></li>
+                        <li><a href="#laptops" class="text-gray-400 hover:text-white transition-colors">Laptops</a></li>
+                        <li><a href="#audio" class="text-gray-400 hover:text-white transition-colors">Audio</a></li>
+                        <li><a href="#wearables" class="text-gray-400 hover:text-white transition-colors">Wearables</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Accessories</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Contact Info</h4>
+                    <div class="space-y-3">
+                        <p class="text-gray-400"><i class="fas fa-map-marker-alt mr-3"></i> Computer Village, Ikeja, Lagos</p>
+                        <p class="text-gray-400"><i class="fas fa-phone mr-3"></i> +234 (912) 382 5193</p>
+                        <p class="text-gray-400"><i class="fas fa-envelope mr-3"></i> abdullahabdulsobur@gmail.com</p>
+                        <p class="text-gray-400"><i class="fas fa-clock mr-3"></i> Mon-Fri: 9AM-6PM</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 text-center">
+                <p class="text-gray-400">© 2025 Tech Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 transition-opacity duration-300">
+        <div class="absolute right-0 top-0 h-full w-full md:w-96 bg-gray-900 shadow-xl transform transition-transform duration-300 translate-x-full">
+            <div class="p-6 h-full flex flex-col">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-white">Shopping Cart</h3>
+                    <button id="close-cart" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div id="cart-items" class="flex-1 overflow-y-auto space-y-4 mb-6">
+                    <!-- Cart items will be dynamically added here -->
+                </div>
+                
+                <div class="border-t border-gray-700 pt-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="font-semibold text-white">Total:</span>
+                        <span id="cart-total" class="font-bold text-xl text-indigo-400">₦0.00</span>
+                    </div>
+                    
+                    <button id="whatsapp-checkout" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
+                        <i class="fab fa-whatsapp mr-3 text-lg"></i>
+                        Checkout via WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add to Cart Notification -->
+    <div id="cart-notification" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg hidden cart-notification">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span>Item added to cart!</span>
+    </div>
+
+    <script>
+        // Cart functionality
+        let cart = JSON.parse(localStorage.getItem('tech_haven_cart')) || [];
+        const cartModal = document.getElementById('cart-modal');
+        const cartItems = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+        const cartCount = document.getElementById('cart-count');
+        const cartBtn = document.getElementById('cart-btn');
+        const closeCart = document.getElementById('close-cart');
+        const notification = document.getElementById('cart-notification');
+        const whatsappCheckout = document.getElementById('whatsapp-checkout');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // Initialize cart count
+        updateCartCount();
+
+        // Mobile menu toggle
+        mobileMenuBtn.addEventListener('click', function() {
+            const isOpen = mobileMenu.style.height !== '0px';
+            if (isOpen) {
+                mobileMenu.style.height = '0px';
+            } else {
+                mobileMenu.style.height = '200px';
+            }
+        });
+
+        // Scroll to category function
+        function scrollToCategory(categoryId) {
+            const element = document.getElementById(categoryId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Add to cart buttons
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                const price = parseFloat(this.getAttribute('data-price'));
+                
+                addToCart(id, name, price);
+            });
+        });
+
+        // Show cart modal
+        cartBtn.addEventListener('click', function() {
+            cartModal.classList.remove('hidden');
+            setTimeout(() => {
+                cartModal.querySelector('.transform').classList.remove('translate-x-full');
+            }, 10);
+            updateCartDisplay();
+        });
+
+        // Close cart modal
+        closeCart.addEventListener('click', function() {
+            cartModal.querySelector('.transform').classList.add('translate-x-full');
+            setTimeout(() => {
+                cartModal.classList.add('hidden');
+            }, 300);
+        });
+
+        // Close modal when clicking outside
+        cartModal.addEventListener('click', function(e) {
+            if (e.target === cartModal) {
+                cartModal.querySelector('.transform').classList.add('translate-x-full');
+                setTimeout(() => {
+                    cartModal.classList.add('hidden');
+                }, 300);
+            }
+        });
+
+        // WhatsApp checkout
+        whatsappCheckout.addEventListener('click', function() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            let message = "Hello! I'd like to purchase the following items from Tech Haven:\n\n";
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                message += `• ${item.name} (Qty: ${item.quantity}) - ₦${itemTotal.toLocaleString()}\n`;
+            });
+            
+            message += `\nTotal: ₦${total.toLocaleString()}\n\nPlease let me know how to proceed with payment and delivery.`;
+            
+            // Encode message for WhatsApp URL
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/2349123825193?text=${encodedMessage}`;
+            
+            window.open(whatsappUrl, '_blank');
+        });
+
+        function addToCart(id, name, price) {
+            // Check if item already in cart
+            const existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({
+                    id,
+                    name,
+                    price,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('tech_haven_cart', JSON.stringify(cart));
+            updateCartCount();
+            showNotification();
+        }
+
+        function updateCartCount() {
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+
+        function updateCartDisplay() {
+            cartItems.innerHTML = '';
+            let total = 0;
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center py-12">
+                        <i class="fas fa-shopping-cart text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-400">Your cart is empty</p>
+                    </div>
+                `;
+                cartTotal.textContent = '₦0.00';
+                return;
+            }
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                const cartItem = document.createElement('div');
+                cartItem.className = 'flex justify-between items-center border-b border-gray-700 pb-4';
+                cartItem.innerHTML = `
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-white text-sm">${item.name}</h4>
+                        <p class="text-gray-400 text-xs">₦${item.price.toLocaleString()} x ${item.quantity}</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button class="decrease-item text-gray-400 hover:text-red-400 transition-colors" data-id="${item.id}">
+                            <i class="fas fa-minus text-sm"></i>
+                        </button>
+                        <span class="text-white text-sm font-medium">${item.quantity}</span>
+                        <button class="increase-item text-gray-400 hover:text-green-400 transition-colors" data-id="${item.id}">
+                            <i class="fas fa-plus text-sm"></i>
+                        </button>
+                    </div>
+                `;
+                
+                cartItems.appendChild(cartItem);
+            });
+            
+            // Update total
+            cartTotal.textContent = `₦${total.toLocaleString()}`;
+            
+            // Add event listeners to quantity buttons
+            document.querySelectorAll('.increase-item').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const item = cart.find(item => item.id === id);
+                    if (item) {
+                        item.quantity++;
+                        localStorage.setItem('tech_haven_cart', JSON.stringify(cart));
+                        updateCartDisplay();
+                        updateCartCount();
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.decrease-item').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const itemIndex = cart.findIndex(item => item.id === id);
+                    if (itemIndex !== -1) {
+                        if (cart[itemIndex].quantity > 1) {
+                            cart[itemIndex].quantity--;
+                        } else {
+                            cart.splice(itemIndex, 1);
+                        }
+                        localStorage.setItem('tech_haven_cart', JSON.stringify(cart));
+                        updateCartDisplay();
+                        updateCartCount();
+                    }
+                });
+            });
+        }
+
+        // Show notification
+        function showNotification() {
+            notification.classList.remove('hidden');
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
